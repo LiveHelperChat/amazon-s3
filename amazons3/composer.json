@@ -1,0 +1,23 @@
+{
+    "name": "livehelperchat/amazons3",
+    "version": "1.0",
+    "description": "AmazonS3 file storage for live helper chat",
+    "type": "project",
+    "homepage": "http://ivehelperchat.com",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Live helper Chat",
+            "homepage": "http://ivehelperchat.com"
+        }
+    ],
+    "support": {
+        "email": "remdex@mgmail.com"      
+    },
+    "require": {       
+        "aws/aws-sdk-php": "*"
+    },       
+    "config": {
+        "vendor-dir": "vendor"
+    }
+}

@@ -1,0 +1,12 @@
+This extension enables cloud storage using Amazon S3 as provider. It's very easy to setup and enable horizontal scalability.
+
+How to install?
+1. Edit settings/settings.ini.php and activate extension. Add it as the last one
+'extensions' => 
+      array (
+        0 => 'amazons3',
+),
+
+2. Rename extension/amazons3/settings/settings.ini.default.php to extension/amazons3/settings/settings.ini.php
+Edit settings
+extension/amazons3/settings/settings.ini.php
