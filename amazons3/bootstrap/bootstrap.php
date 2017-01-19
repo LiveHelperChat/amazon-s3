@@ -13,15 +13,30 @@ class erLhcoreClassExtensionAmazons3 {
 	private $S3Settings = array();
 	private $s3Bucket = '';
 	
-	public function run() {		
-		
+	public function run() {	
+	    		    
 		// Register autoload
 		include 'extension/amazons3/vendor/autoload.php';
 		$settings = include 'extension/amazons3/settings/settings.ini.php';
 		
 		$dispatcher = erLhcoreClassChatEventDispatcher::getInstance();
-		 
-		$this->S3Settings = array('key' => $settings['key'], 'secret' => $settings['secret']);
+
+		$key = $settings['key'];
+		$secret = $settings['secret'];
+		
+		$params = [
+		    'version'     => 'latest',
+		    'region'      => $settings['region']
+		];
+		
+		if ($key != '' && $secret != '') {
+		    $params['credentials'] = [
+		        'key'    => $key,
+		        'secret' => $secret
+		    ];
+		}
+		
+		$this->S3Settings = $params;
 		
 		$this->s3Bucket = $settings['lhc_bucket'];
 		
@@ -119,7 +134,7 @@ class erLhcoreClassExtensionAmazons3 {
 	public function __get($var) {
 	    switch ($var) {
 	        case 's3':
-	           $this->s3 = Aws\S3\S3Client::factory($this->S3Settings);
+	           $this->s3 = new Aws\S3\S3Client($this->S3Settings);
 	           return $this->s3;
 	        break;
 	        
@@ -179,10 +194,10 @@ class erLhcoreClassExtensionAmazons3 {
 			$this->storeToAmazon( $prefixPath . $params['name'], $params['file_path'], $this->get_mime($params['file_path']));
 						
 			unlink($params['file_path']); // We do not need anymore original file
-	
-			$theme->$params['path_attr'] = '';
+							
+			$theme->{$params['path_attr']} = '';
 			
-			$theme->$params['name_attr'] = $prefixPath . $params['name'];
+			$theme->{$params['name_attr']} = $prefixPath . $params['name'];
 		}
 	}
 	
@@ -422,14 +437,11 @@ class erLhcoreClassExtensionAmazons3 {
 			$response['errors'] = $file["errors"];
 			return $response;
 		}
-		
+				
 		$prefixPath = substr(md5($params['dir']), 0, 4) . '-profile/';
 		
 		$this->storeToAmazon($prefixPath . $file['data']['filename'], $file['data']['dir'] . $file['data']['filename'], $file['data']['mime_type']);			
 		$file['data']['dir'] = '';
-						
-		// delete file
-		unlink($file['data']['dir'] . $file['data']['filename']);
 		
 		$file['data']['filename'] = $prefixPath . $file['data']['filename'];
 		

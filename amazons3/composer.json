@@ -15,7 +15,7 @@
         "email": "remdex@mgmail.com"      
     },
     "require": {       
-        "aws/aws-sdk-php": "*"
+        "aws/aws-sdk-php": "3.x"
     },       
     "config": {
         "vendor-dir": "vendor"

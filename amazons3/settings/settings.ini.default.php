@@ -14,6 +14,7 @@ return array (
     
     // Authentification
     's3_files_host' => 'https://s3-eu-west-1.amazonaws.com',    
+    'region' => '<enter_your_region>',
     'key' => '<enter_your_key>',
     'secret' => '<enter_your_secret>',
 );
