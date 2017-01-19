@@ -301,16 +301,21 @@ class erLhcoreClassExtensionAmazons3 {
 	public function fileStore($params)
 	{
 		$file = $params['chat_file'];
+		$filePathServer = isset($params['file_path_server']) ? $params['file_path_server'] : 'file_path_server';
+		$name = isset($params['name']) ? $params['name'] : 'name';
+		$type = isset($params['type']) ? $params['type'] : 'type';
+		$filesPath = isset($params['files_path']) ? $params['files_path'] : 'files_path';
+		$filesPathStorage = isset($params['files_path_storage']) ? $params['files_path_storage'] : 'files_path';
 		
-		if (file_exists($file->file_path_server)) {						
-		    $prefixPath = substr(md5($file->file_path_server), 0, 4) . '-user-files/';
+		if (file_exists($file->{$filePathServer})) {						
+		    $prefixPath = substr(md5($file->{$filePathServer}), 0, 4) . '-user-files/';
 		    		    
-		    $this->storeToAmazon($prefixPath . $file->name, $file->file_path_server, $file->type, false, 'files_path', false);
+		    $this->storeToAmazon($prefixPath . $file->{$name}, $file->{$filePathServer}, $file->{$type}, false, $filesPathStorage, false);
 		    
-			unlink($file->file_path_server); // We do not need anymore original file
+			unlink($file->{$filePathServer}); // We do not need anymore original file
 			
-			$file->name = $prefixPath . $file->name;
-			$file->file_path = '';
+			$file->{$name} = $prefixPath . $file->{$name};
+			$file->{$filesPath} = '';
 			$file->saveThis();
 		}		
 	}
@@ -422,7 +427,7 @@ class erLhcoreClassExtensionAmazons3 {
 	    } else {
 	        $params['Body'] = $filePath;
 	    }
-	     
+	    
 	    $this->s3->putObject($params);
 	}
 		
