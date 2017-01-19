@@ -284,9 +284,12 @@ class erLhcoreClassExtensionAmazons3 {
 	public function fileDownload($params)
 	{
 	    $file = $params['chat_file'];
-	    	    
+	    
+	    $name = isset($params['name']) ? $params['name'] : 'name';
+	    $files_path = isset($params['files_path_storage']) ? $params['files_path_storage'] : 'files_path';
+	    
 	    try {
-	        $imageData = $this->getAmazonS3File($file->name, 'files_path');
+	        $imageData = $this->getAmazonS3File($file->{$name}, $files_path);
 	        return array('status' => erLhcoreClassChatEventDispatcher::STOP_WORKFLOW, 'filedata' => $imageData);
 	    } catch (Exception $e) {
 	        return false;
@@ -306,17 +309,21 @@ class erLhcoreClassExtensionAmazons3 {
 		$type = isset($params['type']) ? $params['type'] : 'type';
 		$filesPath = isset($params['files_path']) ? $params['files_path'] : 'files_path';
 		$filesPathStorage = isset($params['files_path_storage']) ? $params['files_path_storage'] : 'files_path';
+		$aclRule = isset($params['acl_rule']) ? $params['acl_rule'] : false;
 		
 		if (file_exists($file->{$filePathServer})) {						
 		    $prefixPath = substr(md5($file->{$filePathServer}), 0, 4) . '-user-files/';
 		    		    
-		    $this->storeToAmazon($prefixPath . $file->{$name}, $file->{$filePathServer}, $file->{$type}, false, $filesPathStorage, false);
+		    $this->storeToAmazon($prefixPath . $file->{$name}, $file->{$filePathServer}, $file->{$type}, false, $filesPathStorage, $aclRule);
 		    
 			unlink($file->{$filePathServer}); // We do not need anymore original file
 			
 			$file->{$name} = $prefixPath . $file->{$name};
 			$file->{$filesPath} = '';
-			$file->saveThis();
+			
+			if (method_exists($file, 'saveThis')) {
+                $file->saveThis();
+			}
 		}		
 	}
 	
@@ -325,7 +332,10 @@ class erLhcoreClassExtensionAmazons3 {
 	 * */
 	public function fileRemove($params)
 	{
-	    $this->deleteS3File($params['chat_file']->name,'files_path');
+	    $name = isset($params['name']) ? $params['name'] : 'name';
+	    $files_path = isset($params['files_path_storage']) ? $params['files_path_storage'] : 'files_path';
+	        
+	    $this->deleteS3File($params['chat_file']->{$name}, $files_path);
 	}
 	
 	/**
