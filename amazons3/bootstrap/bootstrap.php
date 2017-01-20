@@ -59,6 +59,8 @@ class erLhcoreClassExtensionAmazons3 {
 		$dispatcher->listen('file.uploadfile.file_path',array($this,'filePath'));
 		$dispatcher->listen('file.uploadfileadmin.file_path',array($this,'filePath'));
 		$dispatcher->listen('file.new.file_path',array($this,'filePath'));
+		$dispatcher->listen('admintheme.filedir',array($this,'filePath'));
+		
 		$dispatcher->listen('file.uploadfile.file_store',array($this,'fileStore'));
 		$dispatcher->listen('file.uploadfileadmin.file_store',array($this,'fileStore'));
 		$dispatcher->listen('file.file_new_admin.file_store',array($this,'fileStore'));
