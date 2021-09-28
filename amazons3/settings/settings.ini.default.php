@@ -13,10 +13,10 @@ return array (
     'lhc_bucket' => 'lhc-cloud',
     
     // Authentification
-    's3_files_host' => 'https://s3-eu-west-1.amazonaws.com',    
-    'region' => '<enter_your_region>',
-    'key' => '<enter_your_key>',
-    'secret' => '<enter_your_secret>',
+    's3_files_host' => getenv('S3_HOST') ?: 'https://s3-eu-west-1.amazonaws.com',    
+    'region' => getenv('S3_REGION') ?: '', # enter your region
+    'key' => getenv('S3_KEY') ?: '', # enter your key
+    'secret' => getenv('S3_SECRET') ?: '', # enter your secret
 );
 
 ?>
