@@ -10,7 +10,7 @@ return array (
 	'form_path' => 'lhc-form-files',
     
     // Bucket name
-    'lhc_bucket' => 'lhc-cloud',
+    'lhc_bucket' => getenv('S3_BUCKET') ?: 'lhc-cloud',
     
     // Authentification
     's3_files_host' => getenv('S3_HOST') ?: 'https://s3-eu-west-1.amazonaws.com',    
